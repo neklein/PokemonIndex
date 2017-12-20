@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <!-- Meta -->
+  <meta charset="UTF-8" />
+  <title>Vue.JS Grid</title>
+  
+  <!-- Styles -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <link rel="stylesheet" href="css/index.css">
+  
+  <!-- Scripts -->
+  <script src="https://unpkg.com/vue@2.1.10/dist/vue.js"></script>
+</head>
+
+  <body>
+    <div class="header">
+        <img class="header-logo" src="https://raw.githubusercontent.com/CodeLouisville/FSJS-Weekly-Challenges/master/Challenges/Week5/images/pokedex.png"><h1>Pok&eacute;dex</h1>
+    </div>
+
+    <div id="main-content">
+        <div id="pokedex">
+          <pokemon :pokemon="pokemonList"></pokemon>
+          <button id="previous" class="btn" v-on:click="previous">Previous</button>
+          <button id="next" class="btn" v-on:click="next">Next</button>  
+        </div>
+    </div>
+
+  </div id="single-poke">
+  //probably need to move the below into a script file
+  //this should take the contents of "getDetails from data?"
+    <poke-card style="display:none" :poke-card="getDetails"></poke-card>
+  </div>
+    
+    <img id="pikachu" class="hvr-hang" src="https://raw.githubusercontent.com/CodeLouisville/FSJS-Weekly-Challenges/master/Challenges/Week5/images/pikachu.png" alt="Pikachu">
+
+    
+    <input type="text" value="1" id="poke" style="display:none"></input>    
+    <script type="text/x-template" id="pokemon">
+        <ul class="pokemon" id="pokeList1">
+          <li class="poke-card" id="pokeCard1" v-for="(poke, index) in pokemon"><button id="details" class="btn" v-on:click="select">{{poke.name}} - {{index}}</button></li>
+        </ul>
+    </script>
+
+    <script src="https://unpkg.com/pokeapi-js-wrapper/dist/index.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/index.js"></script>
+</body>
+</html>
