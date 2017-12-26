@@ -8,10 +8,11 @@ Vue.component('pokemon', {
   
   }),
 
-Vue.component('poke-card', {
-    template: '#poke-card',
-    props: ['poke-card']
-  
+Vue.component('pokeCard', {
+    template: '#pokeCard',
+    data: function(){
+      return {poke: ""}
+    }
   })
   
   

@@ -17,101 +17,51 @@ var PokeClient = new Pokedex.Pokedex({
   var app = new Vue({
     el: "#pokedex",
     
-    data: function(){
-      return {
-        pokemonList: []
-      }
+    data: {
+      offset: 0,
+      pokemonList: [],
+      pokeAbilityOne: '',
+      pokeAbilityTwo: '',
+      listDisplayed: true,
+      singleDisplayed: false
     },
    
     mounted: function() {
-      //Could not get the interval to function when added to getPokemonsList(interval)
-      //it still gives me the entire list, making next and previous more difficult.
-      //var interval = {
-        //limit: 12,
-        //offset: 0
-      //}    
-      
-      PokeClient.getPokemonsList().then(function(response) {
-          for(var i = 0; i < 12; i++)
-          {
-            var index = i;
-            var val = response.results[i];
-            app.$set (app.pokemonList, index, val);
-          }
-          
-      });
-
-      
+      this.load();            
     },
-    methods: {      
+    methods: {  
+      load: function(){
+        var vm = this;
+        PokeClient.getPokemonsList({ limit: 12, offset: vm.offset }).then(function(response) {
+          vm.pokemonList = response.results;          
+      });   
+      },
       previous: function() {
-        while(true)
-        {
-          var inputValue = document.getElementById("poke").value;
-          console.log(inputValue);
-          inputValueToAdd = inputValue - 1;
-          console.log(inputValueToAdd);          
-  
-          if(inputValue == 1){
-            alert("You have reached the end of the list of pokemon!");
-            break;
-          }
-  
-          var divToHide = document.getElementById("pokeList" + inputValue);
-          console.log(divToHide);
-          
-          divToHide.style.display = "none";
-
-          var divToDisplay = document.getElementById("pokeList" + inputValueToAdd);
-          
-          divToDisplay.style.display = "block";
-          break;
-            
-        }
+        this.offset = Math.max(0, this.offset - 12);
+          this.load();
       },
 
       next: function() {
-        while(true)
-        {
-          var inputValue = document.getElementById("poke").value;
-          var inputValueToAdd = 1 + parseInt(inputValue);
-
-          if(((inputValueToAdd * 12) - 1) > 948)
-          {
-            alert("You have reached the end of the list of pokemon!");
-            break;
-          }
-
-          
-          document.getElementById("poke").value = inputValueToAdd;
-          
-          PokeClient.getPokemonsList().then(function(response){
-
-            var pieceToSplice = inputValue*12 - 12;
-            var i = inputValue*12;
-            var max = inputValueToAdd*12;
-            for(i; i < max; i++)
-            {
-              var indexOfPoke = i;
-              var val = response.results[i];
-              
-              //verify that the correct index and pokemon are passed:
-              //console.log(val);
-              app.$set (app.pokemonList, indexOfPoke, val);
-            }
-
-          })
-
-
-
-          break;
-        }
-        
+        this.offset += 12;
+        this.load();        
       },
       select: function() {
-        console.log(test);
         //https://vuejs.org/v2/guide/components.html#Async-Components
-        //PokeClient.resource('/api/v2/pokemon/' + poke.name)
+        console.log(PokeClient.resource('/api/v2/pokemon/bulbasaur'));
+        var vm = this;
+
+        PokeClient.resource('/api/v2/pokemon/bulbasaur').then(function(response) {
+          console.log(response);
+          console.log(response.abilities[0].ability.name);
+          vm.pokeAbilityOne = response.abilities[0].ability.name;
+          vm.pokeAbilityTwo = response.abilities[1].ability.name;
+          console.log(vm.stat);
+        });
+        vm.listDisplayed = false;   
+        vm.singleDisplayed = true;     
+        //it still doesn't change kevin to the ability. I'm guessing it is because data is a function that returns stat.
+        //it may not be able to update live. I will need to test that. 
+        //I will probably need to create a component that does something slightly different with data
       }
     }
   });

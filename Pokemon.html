@@ -21,25 +21,25 @@
 
     <div id="main-content">
         <div id="pokedex">
-          <pokemon :pokemon="pokemonList"></pokemon>
+          <h3 v-on:click="select">Get the Pokemon</h3>
+          <p v-show="singleDisplayed">Abilities: {{pokeAbilityOne}}, {{pokeAbilityTwo}}</p>
+          <p v-show="singleDisplayed"></p>
+          <pokemon :pokemon="pokemonList" v-show="listDisplayed"></pokemon>
           <button id="previous" class="btn" v-on:click="previous">Previous</button>
           <button id="next" class="btn" v-on:click="next">Next</button>  
         </div>
     </div>
 
-  </div id="single-poke">
-  //probably need to move the below into a script file
-  //this should take the contents of "getDetails from data?"
-    <poke-card style="display:none" :poke-card="getDetails"></poke-card>
-  </div>
+    <script type="text/x-template" id="pokeCard">
+      <button class="btn" v-on:click="select"></button>
+  </script>
     
     <img id="pikachu" class="hvr-hang" src="https://raw.githubusercontent.com/CodeLouisville/FSJS-Weekly-Challenges/master/Challenges/Week5/images/pikachu.png" alt="Pikachu">
 
     
-    <input type="text" value="1" id="poke" style="display:none"></input>    
     <script type="text/x-template" id="pokemon">
         <ul class="pokemon" id="pokeList1">
-          <li class="poke-card" id="pokeCard1" v-for="(poke, index) in pokemon"><button id="details" class="btn" v-on:click="select">{{poke.name}} - {{index}}</button></li>
+          <li class="poke-card" v-for="(poke, index) in pokemon"><h3>{{poke.name}} - {{index}}</h3></li>
         </ul>
     </script>
 
