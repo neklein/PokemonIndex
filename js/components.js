@@ -4,14 +4,20 @@
 
 Vue.component('pokemon', {
     template: '#pokemon',
-    props: ['pokemon']
-  
+    methods: {
+      thisSelect: function(pokeName){
+        this.$emit('select', pokeName);        
+      }
+    },
+    props: ['pokemon']  
   }),
 
-Vue.component('pokeCard', {
+Vue.component('single-poke', {
     template: '#pokeCard',
-    data: function(){
-      return {poke: ""}
+    props: {
+      poke: {
+        type: null
+      }
     }
   })
   

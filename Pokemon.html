@@ -21,26 +21,39 @@
 
     <div id="main-content">
         <div id="pokedex">
-          <h3 v-on:click="select">Get the Pokemon</h3>
-          <p v-show="singleDisplayed">Abilities: {{pokeAbilityOne}}, {{pokeAbilityTwo}}</p>
-          <p v-show="singleDisplayed"></p>
-          <pokemon :pokemon="pokemonList" v-show="listDisplayed"></pokemon>
-          <button id="previous" class="btn" v-on:click="previous">Previous</button>
-          <button id="next" class="btn" v-on:click="next">Next</button>  
+          <single-poke :poke="pokeArray" v-show="singleDisplayed">
+          </single-poke>      
+          <pokemon :pokemon="pokemonList" v-show="listDisplayed" v-on:select="select($event)"></pokemon>
+          <button id="previous" class="btn" v-on:click="previous" v-show="listDisplayed">Previous</button>
+          <button id="next" class="btn" v-on:click="next" v-show="listDisplayed">Next</button>  
+          <button class="btn" v-show="singleDisplayed" v-on:click="singleDisplayed =! singleDisplayed, listDisplayed =! listDisplayed">Return to List View</button>          
         </div>
     </div>
 
     <script type="text/x-template" id="pokeCard">
-      <button class="btn" v-on:click="select"></button>
+      <div>
+        <table>
+          <tr>
+            <td class="poke-card"><h3>Name</h3></td>
+            <td class="poke-card"><h3>Ability</h3></td>
+            <td class="poke-card"><h3>Move</h3></td>
+            <td class="poke-card"><h3>Type</h3></td>
+            <td class="poke-card"><h3>Weight</h3></td>
+          </tr>
+          <tr ><td v-for="item in poke" class="poke-card"><h3>{{ item }}</h3></td></tr>
+        </table>
+      </div>
   </script>
     
     <img id="pikachu" class="hvr-hang" src="https://raw.githubusercontent.com/CodeLouisville/FSJS-Weekly-Challenges/master/Challenges/Week5/images/pikachu.png" alt="Pikachu">
 
     
     <script type="text/x-template" id="pokemon">
-        <ul class="pokemon" id="pokeList1">
-          <li class="poke-card" v-for="(poke, index) in pokemon"><h3>{{poke.name}} - {{index}}</h3></li>
-        </ul>
+      <div>
+          <ul class="pokemon" id="pokeList">
+            <li class="poke-card" v-for="(poke, index) in pokemon"><h3 v-on:click="thisSelect(poke.name)">{{poke.name}} - {{index}}</h3></li>
+          </ul>    
+      </div>
     </script>
 
     <script src="https://unpkg.com/pokeapi-js-wrapper/dist/index.js"></script>

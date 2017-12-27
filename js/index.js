@@ -12,18 +12,18 @@ var PokeClient = new Pokedex.Pokedex({
   
   // Init Vue!
 
-  
 
   var app = new Vue({
     el: "#pokedex",
     
-    data: {
-      offset: 0,
-      pokemonList: [],
-      pokeAbilityOne: '',
-      pokeAbilityTwo: '',
-      listDisplayed: true,
-      singleDisplayed: false
+    data: function() {
+      return {
+        offset: 0,
+        pokemonList: [],
+        listDisplayed: true,
+        singleDisplayed: false,
+        pokeArray: []        
+      }
     },
    
     mounted: function() {
@@ -45,23 +45,18 @@ var PokeClient = new Pokedex.Pokedex({
         this.offset += 12;
         this.load();        
       },
-      select: function() {
-        //https://vuejs.org/v2/guide/components.html#Async-Components
-        console.log(PokeClient.resource('/api/v2/pokemon/bulbasaur'));
+      select: function(pokeName) {
         var vm = this;
 
-        PokeClient.resource('/api/v2/pokemon/bulbasaur').then(function(response) {
-          console.log(response);
-          console.log(response.abilities[0].ability.name);
-          vm.pokeAbilityOne = response.abilities[0].ability.name;
-          vm.pokeAbilityTwo = response.abilities[1].ability.name;
-          console.log(vm.stat);
+        PokeClient.resource('/api/v2/pokemon/' + pokeName).then(function(response) {
+          vm.$set(vm.pokeArray, 0, response.name);          
+          vm.$set(vm.pokeArray, 1, response.abilities[0].ability.name);
+          vm.$set(vm.pokeArray, 2, response.moves[0].move.name);
+          vm.$set(vm.pokeArray, 3, response.types[0].type.name);
+          vm.$set(vm.pokeArray, 4, response.weight);
         });
         vm.listDisplayed = false;   
-        vm.singleDisplayed = true;     
-        //it still doesn't change kevin to the ability. I'm guessing it is because data is a function that returns stat.
-        //it may not be able to update live. I will need to test that. 
-        //I will probably need to create a component that does something slightly different with data
+        vm.singleDisplayed = true;   
       }
     }
   });
